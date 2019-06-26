@@ -45,6 +45,7 @@ fetch(baseUrl)
       return pop.appendChild(elem)
   }
 
+storeData = []
  function btnClick (){
   popData.innerHTML= ''
    let id = this.getAttribute('data-id')
@@ -53,6 +54,7 @@ fetch(baseUrl)
         return dresponse.json()
       })
       .then(detaildata => {
+        storeData.push(detaildata)
         let title = createPopNode('h3')
         let name = createPopNode('p')
         let userName = createPopNode('p')
@@ -70,7 +72,6 @@ fetch(baseUrl)
         address.innerHTML = `Address: ${detaildata.address.city}, ${detaildata.address.suite}, ${detaildata.address.zipcode}. `
         phone.innerHTML = `Phone: <span>${detaildata.phone}</span>`
         website.innerHTML = `Website: ${detaildata.website}`
-        console.log(detaildata)
       })
  }
 
