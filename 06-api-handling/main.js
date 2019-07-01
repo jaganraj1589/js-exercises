@@ -50,23 +50,29 @@ fetch(baseUrl)
  function btnClick (popDetail){
   popData.innerHTML= ''
   let id = this.getAttribute('data-id')
+  let loader = document.getElementById('loader')
+  // this.classList.add('loader')
   if(JSON.parse(localStorage.getItem(id))){
     createPopup(JSON.parse(localStorage.getItem(id)))
+    // loader.classList.add('hide')
   } 
   else{
+    loader.classList.remove('hide')
     fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
-    .then(dresponse => {
+    .then(dresponse => {  
+      loader.classList.add('hide')
       return dresponse.json()
+      
     })
     .then(detaildata => {
       localStorage.setItem(id,JSON.stringify(detaildata));
       let popDetail = JSON.parse(localStorage.getItem(id))
-      createPopup(detaildata)
+      createPopup(detaildata)      
     })
   }
  }
 
- function createPopup(popDetail){
+ function createPopup(popDetail){  
   let title = createPopNode('h3')
   let name = createPopNode('p')
   let userName = createPopNode('p')

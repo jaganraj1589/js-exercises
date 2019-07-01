@@ -37,3 +37,7 @@ body{
     border-bottom: solid 1px #cdcdcd;
     text-transform: uppercase;
 }
+.progress{
+   position: fixed !important;
+   top:0;
+}
