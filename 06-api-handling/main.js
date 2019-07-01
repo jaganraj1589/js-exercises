@@ -1,10 +1,10 @@
 const baseUrl = 'https://jsonplaceholder.typicode.com/posts';
 
 
-const list = document.getElementById('list')
+
 const createDocNode = (e) => {
     let elem =  document.createElement(e);
-    return list.appendChild(elem)
+    return elem
 }
 
 fetch(baseUrl)
@@ -13,14 +13,15 @@ fetch(baseUrl)
   })
   
   .then(data => {
-    
-    console.log(data)
-    
+    localStorage.removeItem('popData')
+    // console.log(data)
+    const list = document.getElementById('list')
     data.forEach(e => {
-        let li = createDocNode('li'); 
+        let li = createDocNode('li');
         let h2 = createDocNode('h2');
         let p = createDocNode('p');
         let btn = createDocNode('button');
+        list.appendChild(li)
         li.appendChild(h2);
         li.appendChild(p);
         li.appendChild(btn);
@@ -45,38 +46,47 @@ fetch(baseUrl)
       return pop.appendChild(elem)
   }
 
-storeData = []
- function btnClick (){
-  popData.innerHTML= ''
-   let id = this.getAttribute('data-id')
-   fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
-      .then(dresponse => {
-        return dresponse.json()
-      })
-      .then(detaildata => {
-        storeData.push(detaildata)
-        let title = createPopNode('h3')
-        let name = createPopNode('p')
-        let userName = createPopNode('p')
-        let email = createPopNode('p')
-        let company = createPopNode('p')
-        let address = createPopNode('p')
-        let phone = createPopNode('p')
-        let website = createPopNode('p')
 
-        title.innerHTML = 'Details'
-        name.innerHTML = `Name: <span>${detaildata.name}</span>`
-        userName.innerHTML = `Username: ${detaildata.username}`
-        email.innerHTML = `Email: <span>${detaildata.email}</span>`
-        company.innerHTML = `Company: <span>${detaildata.company.name}</span>`
-        address.innerHTML = `Address: ${detaildata.address.city}, ${detaildata.address.suite}, ${detaildata.address.zipcode}. `
-        phone.innerHTML = `Phone: <span>${detaildata.phone}</span>`
-        website.innerHTML = `Website: ${detaildata.website}`
-      })
+ function btnClick (popDetail){
+  popData.innerHTML= ''
+  let id = this.getAttribute('data-id')
+  if(JSON.parse(localStorage.getItem(id))){
+    createPopup(JSON.parse(localStorage.getItem(id)))
+  } 
+  else{
+    fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+    .then(dresponse => {
+      return dresponse.json()
+    })
+    .then(detaildata => {
+      localStorage.setItem(id,JSON.stringify(detaildata));
+      let popDetail = JSON.parse(localStorage.getItem(id))
+      createPopup(detaildata)
+    })
+  }
  }
 
- 
+ function createPopup(popDetail){
+  let title = createPopNode('h3')
+  let name = createPopNode('p')
+  let userName = createPopNode('p')
+  let email = createPopNode('p')
+  let company = createPopNode('p')
+  let address = createPopNode('p')
+  let phone = createPopNode('p')
+  let website = createPopNode('p')
+
+  title.innerHTML = 'Details'
+  name.innerHTML = `Name: <span>${popDetail.name}</span>`
+  userName.innerHTML = `Username: ${popDetail.username}`
+  email.innerHTML = `Email: <span>${popDetail.email}</span>`
+  company.innerHTML = `Company: <span>${popDetail.company.name}</span>`
+  address.innerHTML = `Address: ${popDetail.address.city}, ${popDetail.address.suite}, ${popDetail.address.zipcode}. `
+  phone.innerHTML = `Phone: <span>${popDetail.phone}</span>`
+  website.innerHTML = `Website: ${popDetail.website}`
+ }
+
   document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.modal');
     var instances = M.Modal.init(elems);   
-  });
+  }); 
